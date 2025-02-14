@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: echo_database
+    hostname: postgres
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: echo
+      POSTGRES_PASSWORD: echo#2025
+      POSTGRES_DB: echo_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+#  app:
+#    build: .
+#    container_name: studentHub_app
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/studentHub_db
+#      SPRING_DATASOURCE_USERNAME: studentHub
+#      SPRING_DATASOURCE_PASSWORD: studentHub#2024
+#    depends_on:
+#      - postgres
+#    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: echo_db_manager
+    environment:
+      PGADMIN_DEFAULT_EMAIL: echo@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: echo12345
+    ports:
+      - 5050:80
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  pgadmin-data:
