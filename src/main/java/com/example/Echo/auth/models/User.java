@@ -1,7 +1,9 @@
 package com.example.Echo.auth.models;
 
+import com.example.Echo.publications.models.Publication;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.engine.internal.Cascade;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -41,6 +43,17 @@ public class User implements UserDetails, Serializable {
 
     public void setVerified(Boolean verified) {
         isVerified = verified;
+    }
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    public List<Publication> publications;
+
+    public List<Publication> getPublications() {
+        return publications;
+    }
+
+    public void setPublications(List<Publication> publications) {
+        this.publications = publications;
     }
 
     @Override
