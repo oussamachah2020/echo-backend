@@ -1,22 +1,20 @@
-package com.example.Echo.publications.models;
+package com.example.Echo.surveys.models;
 
 import com.example.Echo.auth.models.User;
-import com.example.Echo.surveys.models.Survey;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@EntityListeners(AuditingEntityListener.class)
 @Data
 @Entity
-@Table(name = "publication")
-@EntityListeners(AuditingEntityListener.class)
-public class Publication implements Serializable {
+@Table(name = "survey")
+public class Survey {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -24,36 +22,11 @@ public class Publication implements Serializable {
     @Column(name = "id")
     String id;
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    @CreatedDate
-    @Column(updatable = false, nullable = false, name = "created_at")
-    private LocalDateTime createdAt; // Automatically set on creation
-
-    @LastModifiedDate
-    @Column(nullable = false, name = "updated_at")
-    private LocalDateTime updatedAt;
-
     @Column(name = "title", nullable = false)
     String title;
 
     @Column(name = "description")
     String description;
-
 
     public String getId() {
         return id;
@@ -67,6 +40,15 @@ public class Publication implements Serializable {
         return title;
     }
 
+
+    @LastModifiedDate
+    @Column(nullable = false, name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @CreatedDate
+    @Column(nullable = false, name = "created_at")
+    private LocalDateTime createdAt;
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -79,14 +61,6 @@ public class Publication implements Serializable {
         this.description = description;
     }
 
-    public String getPhotoUrl() {
-        return photoUrl;
-    }
-
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
-    }
-
     public User getUser() {
         return user;
     }
@@ -95,10 +69,35 @@ public class Publication implements Serializable {
         this.user = user;
     }
 
-    @Column(name = "photo_url")
-    String photoUrl;
+    public List<SurveyOptions> getOptions() {
+        return options;
+    }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    public void setOptions(List<SurveyOptions> options) {
+        this.options = options;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     User user;
+
+    @OneToMany(mappedBy = "survey", cascade = CascadeType.REMOVE)
+    public List<SurveyOptions> options;
+
 }

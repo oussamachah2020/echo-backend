@@ -1,6 +1,7 @@
 package com.example.Echo.auth.models;
 
 import com.example.Echo.publications.models.Publication;
+import com.example.Echo.surveys.models.Survey;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.engine.internal.Cascade;
@@ -47,6 +48,17 @@ public class User implements UserDetails, Serializable {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     public List<Publication> publications;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    List<Survey> surveys;
+
+    public List<Survey> getSurveys() {
+        return surveys;
+    }
+
+    public void setSurveys(List<Survey> surveys) {
+        this.surveys = surveys;
+    }
 
     public List<Publication> getPublications() {
         return publications;
